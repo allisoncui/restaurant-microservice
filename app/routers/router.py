@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.resources.restaurant_resource import RestaurantResource
 
 router = APIRouter()
-restaurant_resource = RestaurantResource(config=db_config)
+restaurant_resource = RestaurantResource(config={})
 
 @router.get("/restaurants", tags=["restaurants"])
 async def get_all_restaurants():
