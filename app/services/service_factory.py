@@ -6,10 +6,10 @@ class ServiceFactory(BaseServiceFactory):
 
     @classmethod
     def get_service(cls, service_name):
-        if service_name == 'UserProfileResource':
-            from app.resources.userprofile_resource import UserProfileResource
-            return UserProfileResource(config=None)
-        elif service_name == 'UserProfileDataService':
+        if service_name == 'RestaurantResource':
+            from app.resources.restaurant_resource import RestaurantResource
+            return RestaurantResource(config=None)
+        elif service_name == 'RestaurantDataService':
             context = {
                 'user': os.getenv("DB_USER", "root"),
                 'password': os.getenv("DB_PASSWORD", "dbuserdbuser"),

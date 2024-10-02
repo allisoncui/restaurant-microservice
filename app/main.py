@@ -1,22 +1,22 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import router as user_router
+from app.routers import router as restaurant_router
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:3000'],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(user_router.router)
+app.include_router(restaurant_router.router)
 
 @app.get("/")
 async def root():
-    return {"message": "User Microservice is running"}
+    return {"message": "Restaurant Microservice is running"}
 
 if __name__ == "__main__":
     import uvicorn
