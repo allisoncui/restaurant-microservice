@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 class RestaurantResource:
 
     def __init__(self, config):
+        super().__init__(config)
         self.db_config = {
             'host': config.get("host", "availability-database.cb821k94flru.us-east-1.rds.amazonaws.com"),
             'user': config.get("user", "root"),
