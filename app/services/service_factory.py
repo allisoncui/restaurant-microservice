@@ -1,6 +1,9 @@
 import os
 from framework.services.service_factory import BaseServiceFactory
 from framework.services.data_access.MySQLRDBDataService import MySQLRDBDataService
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class ServiceFactory(BaseServiceFactory):
 
@@ -11,10 +14,10 @@ class ServiceFactory(BaseServiceFactory):
             return RestaurantResource(config=None)
         elif service_name == 'RestaurantDataService':
             context = {
-                'user': os.getenv("DB_USER", "root"),
-                'password': os.getenv("DB_PASSWORD", "dbuserdbuser"),
-                'host': os.getenv("DB_HOST", "availability-database.cb821k94flru.us-east-1.rds.amazonaws.com"),
-                'port': int(os.getenv("DB_PORT", 3306))
+                'user': os.getenv('DB_USER'),
+                'password': os.getenv('DB_PASSWORD'),
+                'host': os.getenv('DB_HOST'),
+                'port': int(os.getenv('DB_PORT', 3306))
             }
             return MySQLRDBDataService(context=context)
         else:

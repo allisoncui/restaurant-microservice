@@ -1,6 +1,10 @@
+import os
 import pymysql
 import logging
 from app.models.restaurant import Restaurant
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -9,11 +13,11 @@ class RestaurantResource:
 
     def __init__(self, config):
         self.db_config = {
-            'host': config.get("host", "availability-database.cb821k94flru.us-east-1.rds.amazonaws.com"),
-            'user': config.get("user", "root"),
-            'password': config.get("password", "dbuserdbuser"),
-            'database': config.get("database", "availability"),
-            'port': config.get("port", 3306)
+            'host': os.getenv('DB_HOST'),
+            'user': os.getenv('DB_USER'),
+            'password': os.getenv('DB_PASSWORD'),
+            'database': os.getenv('DB_NAME'),
+            'port': int(os.getenv('DB_PORT', 3306))
         }
 
     def get_db_connection(self):
