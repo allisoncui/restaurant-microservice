@@ -3,6 +3,7 @@ import pymysql
 import logging
 from app.models.restaurant import Restaurant
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
@@ -98,4 +99,41 @@ class RestaurantResource:
         finally:
             connection.close()
 
-    
+    def get_restaurant_rating(self, restaurant_code: int):
+        # Step 1: Fetch place_id from the Restaurant table
+        print(f"Fetching place_id for restaurant_code: {restaurant_code}")
+        query = "SELECT place_id FROM Restaurant WHERE restaurant_code = %s"
+        connection = self.get_db_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, (restaurant_code,))
+                result = cursor.fetchone()
+                if not result:
+                    print("No place_id found for the given restaurant_code")
+                    return None  # Return None if no place_id found
+                place_id = result[0]
+                print(f"Found place_id: {place_id}")
+        finally:
+            print("Closing database connection...")
+            connection.close()
+
+        # Step 2: Use the place_id to call the Google Places API
+        google_api_key = os.environ.get('GOOGLE_API_KEY')
+        google_api_url = f"https://maps.googleapis.com/maps/api/place/details/json"
+        full_url = f"{google_api_url}?place_id={place_id}&fields=rating&key={google_api_key}"
+
+        try:
+            response = requests.get(full_url)
+            response.raise_for_status()  # Raise an error for unsuccessful requests
+            data = response.json()
+            print(f"Google API response: {data}")  # Debug: Print API response data
+
+            # Check if rating is present in the response
+            if "result" in data and "rating" in data["result"]:
+                return data["result"]["rating"]
+            else:
+                print("No rating available for this place_id")
+                return None
+        except requests.RequestException as e:
+            print(f"Error fetching rating from Google Places API: {e}")
+            return None

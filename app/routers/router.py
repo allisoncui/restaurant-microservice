@@ -35,3 +35,10 @@ async def remove_viewed_restaurants(username: str, restaurant_codes: list):
 
     restaurant_resource.remove_viewed_restaurants(user_id, restaurant_codes)
     return {"message": "Viewed restaurants removed successfully"}
+
+@router.get("/restaurant/{restaurant_code}/rating", tags=["restaurants"])
+async def get_restaurant_rating(restaurant_code: int):
+    rating = restaurant_resource.get_restaurant_rating(restaurant_code)
+    if rating is None:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    return {"rating": rating}
