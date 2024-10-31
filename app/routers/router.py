@@ -12,15 +12,22 @@ class RestaurantCodesRequest(BaseModel):
     restaurant_codes: List[str]
 
 
-@router.get("/restaurant/{restaurant_code}", response_model=Restaurant)
-async def get_restaurant(restaurant_code: int, request: Request):
+@router.get("/restaurant/{restaurant_code}")
+async def get_restaurant(request: Request, restaurant_code: int):
+    # Fetch the restaurant details from the resource
     restaurant = restaurant_resource.get_by_key(restaurant_code)
     if not restaurant:
         raise HTTPException(status_code=404, detail="Restaurant not found")
 
-    # Add HATEOAS links
+    # Generate HATEOAS links
     links = generate_restaurant_links(request, restaurant_code)
-    return {"restaurant_code": restaurant.restaurant_code, "name": restaurant.name, "_links": links}
+
+    # Return restaurant data along with links
+    return {
+        "restaurant_code": restaurant.restaurant_code,
+        "name": restaurant.name,
+        "_links": links  # Add the links here
+    }
 
 @router.get("/restaurants", tags=["restaurants"])
 async def get_all_restaurants():
