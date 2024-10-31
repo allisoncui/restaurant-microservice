@@ -60,13 +60,12 @@ class RestaurantResource:
         finally:
             connection.close()
 
-    def insert_viewed_restaurants(self, user_id: int, restaurant_codes: list):
+    def insert_viewed_restaurants(self, user_id: int, restaurant_codes: int):
         query = "INSERT INTO Viewed_Restaurants (user_id, restaurant_code) VALUES (%s, %s)"
         connection = self.get_db_connection()
         try:
             with connection.cursor() as cursor:
-                for code in restaurant_codes:
-                    cursor.execute(query, (user_id, code))
+                cursor.execute(query, (user_id, restaurant_codes))
                 connection.commit()
         finally:
             connection.close()
