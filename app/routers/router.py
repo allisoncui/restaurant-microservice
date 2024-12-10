@@ -67,7 +67,7 @@ async def update_viewed_restaurants(username: str, restaurant: int):
 
     return {"message": "Viewed restaurants updated successfully"}
 
-@router.post("/user/{username}/viewed_restaurant", tags=["user"])
+@router.post("/user/{username}/viewed_restaurants", tags=["user"])
 async def add_viewed_restaurant(username: str, restaurant_code: int):
     try:
         user_id = restaurant_resource.get_user_id(username)
@@ -82,7 +82,7 @@ async def add_viewed_restaurant(username: str, restaurant_code: int):
         logger.error(f"Error in add_viewed_restaurant: {e}")
         raise HTTPException(status_code=500, detail="An error occurred while adding viewed restaurant.")
 
-@router.delete("/user/{username}/viewed_restaurant", tags=["user"])
+@router.delete("/user/{username}/viewed_restaurants", tags=["user"])
 async def remove_viewed_restaurant(username: str, restaurant_code: int):
     """
     Remove a single viewed restaurant for the user.
