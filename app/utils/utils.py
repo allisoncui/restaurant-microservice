@@ -14,12 +14,16 @@ def generate_restaurant_links(request: Request, restaurant_code: int) -> Dict[st
 
     return {
         "self": Link(href=self_url, method="GET"),
-        "update": Link(href=f"{self_url}", method="PUT"),
-        "delete": Link(href=f"{self_url}", method="DELETE"),
         "viewed_restaurants": Link(
             href=f"{base_url}user/{restaurant_code}/viewed_restaurants", method="GET"
         ),
-        "add_to_viewed": Link(
+        "add_viewed_restaurants": Link(
             href=f"{base_url}user/{restaurant_code}/viewed_restaurants", method="POST"
+        ),
+        "update_viewed_restaurants": Link(
+            href=f"{base_url}user/{restaurant_code}/viewed_restaurants", method="PUT"
+        ),
+        "delete_viewed_restaurants": Link(
+            href=f"{base_url}user/{restaurant_code}/viewed_restaurants", method="DELETE"
         ),
     }

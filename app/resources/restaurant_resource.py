@@ -9,6 +9,7 @@ load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class RestaurantResource:
 
@@ -60,23 +61,25 @@ class RestaurantResource:
         finally:
             connection.close()
 
-    def insert_viewed_restaurants(self, user_id: int, restaurant_codes: int):
+    def insert_viewed_restaurants(self, user_id: int, restaurant_code: int):
         query = "INSERT INTO Viewed_Restaurants (user_id, restaurant_code) VALUES (%s, %s)"
         connection = self.get_db_connection()
         try:
             with connection.cursor() as cursor:
-                cursor.execute(query, (user_id, restaurant_codes))
+                cursor.execute(query, (user_id, restaurant_code))
                 connection.commit()
+        except Exception as e:  # Properly handle the exception here
+            logger.error(f"Error inserting viewed restaurant: {e}")
+            raise
         finally:
             connection.close()
 
-    def remove_viewed_restaurants(self, user_id: int, restaurant_codes: list):
+    def remove_viewed_restaurants(self, user_id: int, restaurant_code: int):
         query = "DELETE FROM Viewed_Restaurants WHERE user_id = %s AND restaurant_code = %s"
         connection = self.get_db_connection()
         try:
             with connection.cursor() as cursor:
-                for code in restaurant_codes:
-                    cursor.execute(query, (user_id, code))
+                cursor.execute(query, (user_id, restaurant_code))
                 connection.commit()
         finally:
             connection.close()
