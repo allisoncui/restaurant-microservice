@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import router as restaurant_router
+from middleware.middleware import log_request_response
 
 app = FastAPI()
 
@@ -13,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(restaurant_router.router)
+app.middleware("http")(log_request_response)
 
 @app.get("/")
 async def root():
